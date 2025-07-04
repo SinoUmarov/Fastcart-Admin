@@ -223,19 +223,19 @@ const EditProduct = () => {
             </div>
           </section>
 
-          <section className="my-5">
+          <section className="my-5 cursor-pointer">
             <h2 className="text-xl font-bold">Options</h2>
             <div className="flex gap-6 my-3">
               <fieldset className="border-1 p-3 rounded-[5px] w-[40%]">
                 <legend className="px-2">Option 1</legend>
-                <h2 className="text-xl">Size</h2>
+                <h2 className="text-xl ">Size</h2>
               </fieldset>
-              <fieldset className="border-1 p-3 rounded-[5px] w-[17%]">
+              <fieldset className="border-1 p-3 rounded-[5px] w-[17%] cursor-pointer">
                 <legend className="px-2">Value</legend>
                 <select
                   value={size}
                   onChange={(e) => setSize(e.target.value)}
-                  className="py-2 px-3 outline-0 rounded-[5px]"
+                  className="py-2 px-3 outline-0 rounded-[5px] cursor-pointer"
                 >
                   {["S", "M", "L", "XL", "XXL"].map((sz) => (
                     <option key={sz} value={sz}>
@@ -247,19 +247,19 @@ const EditProduct = () => {
             </div>
 
             <div className="flex gap-6 my-3">
-              <fieldset className="border-1 p-3 rounded-[5px] w-[40%]">
-                <legend className="px-2">Option 2</legend>
+              <fieldset className="border-1 p-3 rounded-[5px] w-[40%] cursor-pointer">
+                <legend className="px-2 cursor-pointer">Option 2</legend>
                 <h2 className="text-xl">Weight</h2>
               </fieldset>
-              <fieldset className="border-1 p-3 rounded-[5px] w-[17%]">
+              <fieldset className="border-1 p-3 rounded-[5px] w-[17%] cursor-pointer">
                 <legend className="px-2">Value</legend>
                 <select
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
-                  className="py-2 px-3 outline-0 rounded-[5px]"
+                  className="py-2 px-3 outline-0 rounded-[5px] cursor-pointer"
                 >
                   {[10, 20, 30, 40, 50].map((w) => (
-                    <option key={w} value={w}>
+                    <option  key={w} value={w}>
                       {w}
                     </option>
                   ))}
@@ -270,14 +270,14 @@ const EditProduct = () => {
         </aside>
 
         <aside className="md:w-[33%]">
-          <section className="border-1 p-3 rounded-[5px]">
+          <section className="border-1 p-3 rounded-[20px]">
             <h3 className="text-xl font-bold">Colour:</h3>
             <div className="flex gap-4 flex-wrap">
               {dataCol?.map((e) => (
                 <button
                   key={e.id}
                   onClick={() => setColorId(e.id)}
-                  className={`cursor-pointer py-4 w-[70px] rounded-[5px] border-2 ${
+                  className={`cursor-pointer p-[5px] w-[40px] h-[40px] rounded-[100%] border-2 flex-wrap ${
                     colorId === e.id ? "border-black" : "border-transparent"
                   }`}
                   style={{
@@ -285,7 +285,7 @@ const EditProduct = () => {
                     color: "white",
                   }}
                 >
-                  {e.colorName}
+                
                 </button>
               ))}
             </div>

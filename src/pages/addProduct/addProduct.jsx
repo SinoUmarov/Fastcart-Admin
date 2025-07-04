@@ -124,7 +124,7 @@ const AddProduct = () => {
           <span>/ Add New</span>
         </h2>
         <Link to="/dashboard/products">
-          <button className="border px-5 py-2 rounded text-blue-600 border-blue-600 hover:bg-blue-50">
+          <button className="border px-5 py-2 rounded text-blue-600 border-blue-600 hover:bg-blue-50 cursor-pointer">
             Cancel
           </button>
         </Link>
@@ -264,7 +264,7 @@ const AddProduct = () => {
                 <button
                   key={c.id}
                   onClick={() => setColorId(c.id)}
-                  className={`w-10 h-10 rounded-full border-2 ${
+                  className={`w-10 h-10 rounded-full border-2  cursor-pointer ${
                     colorId === c.id ? "border-black" : "border-gray-300"
                   }`}
                   style={{ backgroundColor: c.colorName }}
@@ -280,7 +280,7 @@ const AddProduct = () => {
               <input
                 type="file"
                 accept="image/*"
-                className="mb-3"
+                className="mb-3 cursor-pointer"
                 onChange={handleImageChange}
               />
               {imagePreview && (
@@ -299,7 +299,7 @@ const AddProduct = () => {
           <button
             onClick={funAddProduct}
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded transition"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded transition cursor-pointer"
           >
             {loading ? "Saving..." : "Save Product"}
           </button>

@@ -106,7 +106,7 @@ const ProductGet = () => {
   return (
     <div className="relative">
       <Link to={"/dashboard/addProduct"}>
-        <button className="absolute right-0 top-[-70px] py-2 bg-blue-600 px-5 rounded-[5px]">
+        <button className="absolute right-0 top-[-70px] py-2 bg-blue-600 px-5 rounded-[5px] cursor-pointer">
           + Add Order
         </button>
       </Link>
