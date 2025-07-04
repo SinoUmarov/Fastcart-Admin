@@ -6,6 +6,7 @@ import { axiosRequest } from '../../api/axiosRequest'
 export const API = import.meta.env.VITE_API_URL;
 
 
+
 export const getProduct = createAsyncThunk("product/getProduct", async () => {
   try {
     const { data } = await axiosRequest.get(`/Product/get-products`);
@@ -40,11 +41,9 @@ export const getColor = createAsyncThunk("product/getColor", async () => {
 
 
 export const deleteProduct = createAsyncThunk("product/deleteProduct", async (id, { dispatch }) => {
-  const token = localStorage.getItem("Admin");
+
   try {
-    await axiosRequest.delete(`/Product/delete-product?id=${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axiosRequest.delete(`/Product/delete-product?id=${id}`);
     toast.success("Product deleted successfully", { autoClose: 1000 });
     dispatch(getProduct());
   } catch (error) {
@@ -56,11 +55,9 @@ export const deleteProduct = createAsyncThunk("product/deleteProduct", async (id
 
 
 export const AddProducts = createAsyncThunk("product/AddProduct", async (elem, { dispatch }) => {
-  const token = localStorage.getItem("Admin");
+ 
   try {
-    await axiosRequest.post(`/Product/add-product`, elem, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axiosRequest.post(`/Product/add-product`, elem, );
     toast.success("Product added successfully", { autoClose: 2000 });
     dispatch(getProduct());
   } catch (error) {
@@ -72,11 +69,9 @@ export const AddProducts = createAsyncThunk("product/AddProduct", async (elem, {
 
 
 export const deleteImage = createAsyncThunk("product/deleteImage", async (id) => {
-  const token = localStorage.getItem("Admin");
+
   try {
-    await axiosRequest.delete(`/Product/delete-image-from-product?imageId=${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axiosRequest.delete(`/Product/delete-image-from-product?imageId=${id}`);
     toast.success("Image deleted successfully", { autoClose: 2000 });
   } catch (error) {
     toast.error("Failed to delete image", { autoClose: 2000 });
@@ -87,11 +82,9 @@ export const deleteImage = createAsyncThunk("product/deleteImage", async (id) =>
 
 
 export const addImages = createAsyncThunk("product/addImages", async (files) => {
-  const token = localStorage.getItem("Admin");
+
   try {
-    await axiosRequest.post(`/Product/add-image-to-product`, files, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axiosRequest.post(`/Product/add-image-to-product`, files, );
     toast.success("Image(s) added successfully", { autoClose: 2000 });
   } catch (error) {
     toast.error("Failed to add image(s)", { autoClose: 2000 });
@@ -102,15 +95,10 @@ export const addImages = createAsyncThunk("product/addImages", async (files) => 
 
 
 export const editProduct = createAsyncThunk("product/editProduct", async (formData, { rejectWithValue }) => {
-  const token = localStorage.getItem("Admin");
+
 
   try {
-    const res = await axiosRequest.put(`/Product/update-product`, formData,{},{
-      headers: {
-        Authorization: `Bearer ${token}`,
-      
-      },
-    });
+    const res = await axiosRequest.put(`Product/update-product?Id=${formData.Id}&BrandId=${formData.BrandId}&ColorId=${formData.ColorId}&ProductName=${formData.ProductName}&Description=${formData.Description}&Quantity=${formData.Quantity}&Weight=${formData.Size}&Size=${formData.Weight}&Code=${formData.Code}&Price=${formData.Price}&HasDiscount=${formData.HasDiscount}&DiscountPrice=${formData.DiscountPrice}&SubCategoryId=${formData.SubCategoryId}`);
 
     toast.success("Product updated successfully");
     return res.data;

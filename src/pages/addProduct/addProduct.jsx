@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getSubCategory } from "../../features/sub category/subCategory";
 import { getBrands } from "../../features/brands/brands";
+import { v4 as uuidv4 } from 'uuid';
 import {
   AddProducts,
   getColor,
@@ -75,7 +76,7 @@ const AddProduct = () => {
     formdata.append("DiscountPrice", discPrice);
     formdata.append("Price", price);
     formdata.append("Quantity", quantity);
-    formdata.append("Code", code);
+    formdata.append("Code", uuidv4());
     formdata.append("Weight", weight);
     formdata.append("Images", image);
     formdata.append("SubCategoryId", subId);

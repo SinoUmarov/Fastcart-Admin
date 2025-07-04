@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+
 import { toast } from "react-toastify";
-import { API } from "../product/product";
+
 import { axiosRequest } from '../../api/axiosRequest'
 
 export const getSubCategory = createAsyncThunk(

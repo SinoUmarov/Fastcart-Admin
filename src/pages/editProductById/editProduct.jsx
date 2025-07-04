@@ -80,6 +80,7 @@ const EditProduct = () => {
 
   const handleEdit = () => {
     const formData = {
+      Id:id,
       Size: size,
       BrandId: brandId,
       DiscountPrice: discPrice,
