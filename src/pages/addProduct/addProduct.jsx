@@ -27,6 +27,7 @@ const AddProduct = () => {
   const [code, setCode] = useState("");
   const [size, setSize] = useState("");
   const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [ProductName, setProductName] = useState("");
   const [disc, setDisc] = useState("");
   const [weight, setWeight] = useState("");
@@ -42,6 +43,7 @@ const AddProduct = () => {
     setCode("");
     setWeight("");
     setImage(null);
+    setImagePreview(null);
     setSubId("");
     setStock(false);
     setDisc("");
@@ -67,32 +69,40 @@ const AddProduct = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("Size", size);
-    formData.append("BrandId", brandId);
-    formData.append("DiscountPrice", discPrice);
-    formData.append("Price", price);
-    formData.append("Quantity", quantity);
-    formData.append("Code", code);
-    formData.append("Weight", weight);
-    formData.append("Images", image[0]);
-    formData.append("SubCategoryId", subId);
-    formData.append("HasDiscount", stock);
-    formData.append("Description", disc);
-    formData.append("ColorId", colorId);
-    formData.append("ProductName", ProductName);
+    const formdata = new FormData();
+    formdata.append("Size", size);
+    formdata.append("BrandId", brandId);
+    formdata.append("DiscountPrice", discPrice);
+    formdata.append("Price", price);
+    formdata.append("Quantity", quantity);
+    formdata.append("Code", code);
+    formdata.append("Weight", weight);
+    formdata.append("Images", image);
+    formdata.append("SubCategoryId", subId);
+    formdata.append("HasDiscount", stock);
+    formdata.append("Description", disc);
+    formdata.append("ColorId", colorId);
+    formdata.append("ProductName", ProductName);
 
     try {
       setLoading(true);
-      await dispatch(AddProducts(formData)).unwrap();
+      await dispatch(AddProducts(formdata)).unwrap();
       toast.success("Product added successfully!", { autoClose: 2000 });
       clearForm();
       navigate("/dashboard/products");
-    } catch (err) {
-      console.error("AddProduct error:", err);
+    } catch (error) {
+      console.error("AddProduct error:", error);
       toast.error("Failed to add product.", { autoClose: 2000 });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -104,235 +114,199 @@ const AddProduct = () => {
   }, [dispatch]);
 
   return (
-    <div>
-      <section className="flex items-center justify-between">
-        <h2 className="md:text-3xl flex gap-4 items-center font-bold">
-          <Link to={"/dashboard/products"}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6 cursor-pointer"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-              />
-            </svg>
+    <div className="p-6">
+      <header className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold flex gap-3 items-center">
+          <Link to="/dashboard/products">
+            <span className="text-blue-600 hover:underline">Products</span>
           </Link>
-          Products / Add new
+          <span>/ Add New</span>
         </h2>
-        <Link to={"/dashboard/products"}>
-          <button className="border-1 py-2 px-7 rounded-[5px] border-blue-600 text-blue-600 cursor-pointer">
+        <Link to="/dashboard/products">
+          <button className="border px-5 py-2 rounded text-blue-600 border-blue-600 hover:bg-blue-50">
             Cancel
           </button>
         </Link>
-      </section>
+      </header>
 
-      <section className="my-10 flex md:flex-row flex-col justify-between">
+      <div className="flex flex-col md:flex-row gap-8">
         {/* LEFT SIDE */}
-        <aside className="md:w-[60%]">
-          <h2 className="text-xl font-bold">Information</h2>
-          <div className="flex md:gap-0 gap-3 my-3 justify-between">
-            <input
-              value={ProductName}
-              onChange={(e) => setProductName(e.target.value)}
-              className="w-[70%] border-1 py-2 px-3 rounded-[5px] outline-0"
-              type="text"
-              placeholder="Product name"
+        <div className="md:w-[60%] space-y-6">
+          <section>
+            <h3 className="text-lg font-semibold mb-2">Basic Info</h3>
+            <div className="flex gap-4 mb-3">
+              <input
+                value={ProductName}
+                onChange={(e) => setProductName(e.target.value)}
+                className="w-full border px-3 py-2 rounded"
+                placeholder="Product Name"
+              />
+              <input
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                type="number"
+                className="w-[30%] border px-3 py-2 rounded"
+                placeholder="Code"
+              />
+            </div>
+            <textarea
+              value={disc}
+              onChange={(e) => setDisc(e.target.value)}
+              className="w-full border px-3 py-2 rounded h-32 resize-none"
+              placeholder="Product Description"
             />
-            <input
-              className="border-1 py-2 px-3 rounded-[5px] outline-0 w-[25%]"
-              type="number"
-              placeholder="Code"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
-          </div>
-          <textarea
-            value={disc}
-            onChange={(e) => setDisc(e.target.value)}
-            className="w-[100%] border-1 h-[200px] py-2 px-3 rounded-[5px] resize-none"
-            placeholder="Description"
-          ></textarea>
-
-          <section className="my-5 flex justify-between items-center">
-            <select
-              value={subId}
-              onChange={(e) => setSubId(e.target.value)}
-              className="py-2 px-3 outline-0 rounded-[5px] w-[47%] border-1"
-            >
-              <option value="">Select Sub Category</option>
-              {dataSub?.map((e) => (
-                <option key={e.id} value={e.id}>
-                  {e.subCategoryName}
-                </option>
-              ))}
-            </select>
-            <select
-              value={brandId}
-              onChange={(e) => setBrandId(e.target.value)}
-              className="py-2 px-3 outline-0 rounded-[5px] w-[47%] border-1"
-            >
-              <option value="">Select Brand</option>
-              {dataBrand?.map((e) => (
-                <option key={e.id} value={e.id}>
-                  {e.brandName}
-                </option>
-              ))}
-            </select>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold">Price</h2>
-            <div className="flex justify-between items-center my-2">
+            <div className="flex gap-4">
+              <select
+                value={subId}
+                onChange={(e) => setSubId(e.target.value)}
+                className="w-1/2 border px-3 py-2 rounded"
+              >
+                <option value="">Select Subcategory</option>
+                {dataSub?.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.subCategoryName}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={brandId}
+                onChange={(e) => setBrandId(e.target.value)}
+                className="w-1/2 border px-3 py-2 rounded"
+              >
+                <option value="">Select Brand</option>
+                {dataBrand?.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.brandName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </section>
+
+          <section>
+            <h3 className="text-lg font-semibold mb-2">Price & Stock</h3>
+            <div className="flex gap-4">
               <input
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 type="number"
-                className="py-2 px-2 border-1 rounded-[5px] outline-0 w-[32%]"
-                placeholder="Product price"
+                className="w-1/3 border px-3 py-2 rounded"
+                placeholder="Price"
               />
               <input
                 value={discPrice}
                 onChange={(e) => setDiscPrice(e.target.value)}
                 type="number"
-                className="py-2 px-2 border-1 rounded-[5px] outline-0 w-[32%]"
-                placeholder="Discount price"
+                className="w-1/3 border px-3 py-2 rounded"
+                placeholder="Discount Price"
               />
               <input
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
                 type="number"
-                className="py-2 px-2 border-1 rounded-[5px] outline-0 w-[32%]"
-                placeholder="Count"
+                className="w-1/3 border px-3 py-2 rounded"
+                placeholder="Quantity"
               />
             </div>
-            <div className="flex justify-between items-center my-4">
-              <aside>
-                <h2 className="text-xl font-bold">Different Options</h2>
-                <p>This product has multiple options</p>
-              </aside>
+            <div className="flex items-center gap-2 mt-3">
               <input
+                type="checkbox"
                 checked={stock}
                 onChange={() => setStock(!stock)}
-                type="checkbox"
-                className="size-5"
               />
+              <label>This product has a discount</label>
             </div>
           </section>
 
-          <section className="my-5">
-            <h2 className="text-xl font-bold">Options</h2>
-            <div className="flex gap-6 my-3">
-              <fieldset className="border-1 p-3 rounded-[5px] w-[40%]">
-                <legend className="px-2">Option 1</legend>
-                <h2 className="text-xl">Size</h2>
-              </fieldset>
-              <fieldset className="border-1 p-3 rounded-[5px] w-[17%]">
-                <legend className="px-2">Value</legend>
-                <select
-                  className="py-2 px-3 outline-0 rounded-[5px]"
-                  value={size}
-                  onChange={(e) => setSize(e.target.value)}
-                >
-                  <option value="">Select size</option>
-                  <option value="S">S</option>
-                  <option value="M">M</option>
-                  <option value="L">L</option>
-                  <option value="XL">XL</option>
-                  <option value="XXL">XXL</option>
-                </select>
-              </fieldset>
-            </div>
-            <div className="flex gap-6 my-3">
-              <fieldset className="border-1 p-3 rounded-[5px] w-[40%]">
-                <legend className="px-2">Option 2</legend>
-                <h2 className="text-xl">Weight</h2>
-              </fieldset>
-              <fieldset className="border-1 p-3 rounded-[5px] w-[17%]">
-                <legend className="px-2">Value</legend>
-                <select
-                  className="py-2 px-3 outline-0 rounded-[5px]"
-                  value={weight}
-                  onChange={(e) => setWeight(e.target.value)}
-                >
-                  <option value="">Select weight</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                  <option value="40">40</option>
-                  <option value="50">50</option>
-                </select>
-              </fieldset>
+          <section>
+            <h3 className="text-lg font-semibold mb-2">Options</h3>
+            <div className="flex gap-4">
+              <select
+                value={size}
+                onChange={(e) => setSize(e.target.value)}
+                className="w-1/2 border px-3 py-2 rounded"
+              >
+                <option value="">Select Size</option>
+                {["S", "M", "L", "XL", "XXL"].map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+                className="w-1/2 border px-3 py-2 rounded"
+              >
+                <option value="">Select Weight</option>
+                {[10, 20, 30, 40, 50].map((w) => (
+                  <option key={w} value={w}>
+                    {w}g
+                  </option>
+                ))}
+              </select>
             </div>
           </section>
-        </aside>
+        </div>
 
         {/* RIGHT SIDE */}
-        <aside className="md:w-[33%]">
-          <section className="border-1 p-3 rounded-[5px]">
-            <h3 className="text-xl font-bold">Colour:</h3>
-            <div className="flex gap-4 flex-wrap">
-              {dataCol?.map((e) => (
+        <div className="md:w-[40%] space-y-6">
+          <section className="border rounded p-4">
+            <h3 className="text-lg font-semibold mb-2">Color</h3>
+            <div className="flex flex-wrap gap-3">
+              {dataCol?.map((c) => (
                 <button
-                  key={e.id}
-                  onClick={() => setColorId(e.id)}
-                  className={`cursor-pointer py-4 w-[70px] rounded-[200%] border-2 ${
-                    colorId === e.id ? "border-black" : "border-transparent"
+                  key={c.id}
+                  onClick={() => setColorId(c.id)}
+                  className={`w-10 h-10 rounded-full border-2 ${
+                    colorId === c.id ? "border-black" : "border-gray-300"
                   }`}
-                  style={{ backgroundColor: e.colorName, color: "white" }}
-                >
-                  {e.colorName}
-                </button>
+                  style={{ backgroundColor: c.colorName }}
+                  title={c.colorName}
+                />
               ))}
             </div>
           </section>
 
-          <section className="my-5">
-            <h3 className="text-xl font-bold">Image</h3>
-            <div className="flex flex-col items-center border-dashed rounded-[5px] p-5 my-3 border-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-8"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                />
-              </svg>
-
+          <section className="border rounded p-4">
+            <h3 className="text-lg font-semibold mb-2">Image Upload</h3>
+            <div className="border-dashed border rounded flex flex-col items-center justify-center p-6 text-center">
               <input
                 type="file"
-                className="w-[50%] text-gray-700"
-                onChange={(e) => setImage(e.target.files)}
+                accept="image/*"
+                className="mb-3"
+                onChange={handleImageChange}
               />
-              <h3 className="text-[19px] font-bold my-3">
-                Click to upload or drag and drop
-              </h3>
-              <p>(SVG, JPG, PNG, or gif maximum 900x400)</p>
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full max-w-[250px] rounded shadow"
+                />
+              )}
+              <p className="text-sm text-gray-500 mt-2">
+                Supported formats: JPG, PNG, GIF (max 900x400)
+              </p>
             </div>
-
-            <button
-              className="py-2 px-8 bg-blue-600 text-white rounded-[5px]"
-              onClick={funAddProduct}
-              disabled={loading}
-            >
-              {loading ? "Saving..." : "Save"}
-            </button>
           </section>
-        </aside>
-      </section>
+
+          <button
+            onClick={funAddProduct}
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded transition"
+          >
+            {loading ? "Saving..." : "Save Product"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default AddProduct;
+  

@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { API } from "../product/product";
+
 import { toast } from "react-toastify";
+import { axiosRequest } from '../../api/axiosRequest'
 
 export const getBrands = createAsyncThunk("brand/getBrands", async () => {
   try {
-    let { data } = await axios.get(`${API}/Brand/get-brands`);
+    let { data } = await axiosRequest.get(`/Brand/get-brands`);
     toast.success("Brands Get Successfully", { autoClose: 1000 });
     return data.data;
   } catch (error) {
@@ -19,8 +19,8 @@ export const addBrand = createAsyncThunk(
   async (nameBrand, { dispatch }) => {
     let token = localStorage.getItem("Admin");
     try {
-      await axios.post(
-        `${API}/Brand/add-brand?BrandName=${nameBrand}`,
+      await axiosRequest.post(
+        `/Brand/add-brand?BrandName=${nameBrand}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -40,7 +40,7 @@ export const deleteBrnad = createAsyncThunk(
   async (id, { dispatch }) => {
     let token = localStorage.getItem("Admin");
     try {
-      await axios.delete(`${API}/Brand/delete-brand?id=${id}`, {
+      await axiosRequest.delete(`/Brand/delete-brand?id=${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Brands removed Successfully", { autoClose: 1000 });
@@ -57,7 +57,7 @@ export const editBrand = createAsyncThunk(
   async (elem , {dispatch}) => {
     let token = localStorage.getItem("Admin");
     try {
-      await axios.put(`${API}/Brand/update-brand?Id=${elem.id}&BrandName=${elem.name}`, {}, {
+      await axiosRequest.put(`/Brand/update-brand?Id=${elem.id}&BrandName=${elem.name}`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Edit Brand Successfully", { autoClose: 1000 });

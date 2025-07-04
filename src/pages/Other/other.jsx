@@ -92,7 +92,7 @@ const Other = () => {
     dispatch(getSubCategory());
   }, [dispatch]);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = ( newValue) => {
     setValue(newValue);
   };
 

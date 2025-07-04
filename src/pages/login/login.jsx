@@ -3,8 +3,8 @@ import Logo from "./img/Group 1116606595 (1).png";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { API } from "../../features/product/product";
+
+import { axiosRequest } from '../../api/axiosRequest'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const Login = () => {
     };
 
     try {
-      const { data } = await axios.post(`${API}/Account/login`, admin);
+      const { data } = await axiosRequest.post(`/Account/login`, admin);
 
       if (data?.data) {
         localStorage.setItem("Admin", data.data);
@@ -53,9 +53,9 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-tr from-blue-600 via-purple-700 to-pink-600">
-      {/* Левая часть с логотипом и приветствием */}
+      
       <section className="md:w-1/2 flex flex-col justify-center items-center p-10 bg-black bg-opacity-70 relative overflow-hidden">
-        {/* Анимированное появление логотипа */}
+       
         <img
           src={Logo}
           alt="Logo"
@@ -71,14 +71,14 @@ const Login = () => {
         >
           Please log in with your credentials to manage the dashboard.
         </p>
-        {/* Нежный светящийся блур на фоне */}
+    
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
           <div className="w-72 h-72 bg-pink-500 rounded-full filter blur-3xl opacity-40 absolute -top-20 -left-20 animate-blob"></div>
           <div className="w-72 h-72 bg-purple-500 rounded-full filter blur-3xl opacity-30 absolute -bottom-20 -right-20 animate-blob animation-delay-4000"></div>
         </div>
       </section>
 
-      {/* Правая часть с формой */}
+     
       <section className="md:w-1/2 flex justify-center items-center p-10 bg-white bg-opacity-90">
         <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-10 transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl">
           <h2 className="text-3xl font-extrabold text-gray-800 mb-6 text-center select-none">Login</h2>
@@ -123,7 +123,7 @@ const Login = () => {
         </div>
       </section>
 
-      {/* Анимации (tailwind не имеет своих keyframes, добавим кастомные в style) */}
+     
       <style>{`
         @keyframes fadeInScale {
           0% {

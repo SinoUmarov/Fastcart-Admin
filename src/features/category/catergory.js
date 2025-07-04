@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { API } from "../product/product";
+
 import { toast } from "react-toastify";
+import { axiosRequest } from '../../api/axiosRequest'
 
 export const getCategory = createAsyncThunk(
   "category/getCategory",
   async () => {
     try {
-      let { data } = await axios.get(`${API}/Category/get-categories`);
+      let { data } = await axiosRequest.get(`/Category/get-categories`);
       toast.success("Category Get Successfully", { autoClose: 1000 });
       return data.data;
     } catch (error) {
@@ -21,7 +21,7 @@ export const deleteCategory = createAsyncThunk(
   async (id, { dispatch }) => {
     let token = localStorage.getItem("Admin");
     try {
-      await axios.delete(`${API}/Category/delete-category?id=${id}`, {
+      await axiosRequest.delete(`/Category/delete-category?id=${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Brands removed Successfully", { autoClose: 1000 });
@@ -38,7 +38,7 @@ export const addCategory = createAsyncThunk(
   async (category, { dispatch }) => {
     let token = localStorage.getItem("Admin");
     try {
-      await axios.post(`${API}/Category/add-category`, category, {
+      await axiosRequest.post(`/Category/add-category`, category, {
         headers: { Authorization: `Bearer ${token}` },
       });
       dispatch(getCategory());
@@ -55,7 +55,7 @@ export const editCategory = createAsyncThunk(
   async (elem , {dispatch}) => {
     let token = localStorage.getItem("Admin");
     try {
-      await axios.put(`${API}/Category/update-category`, elem, {
+      await axiosRequest.put(`/Category/update-category`, elem, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Edit Category Successfully", { autoClose: 1000 });
