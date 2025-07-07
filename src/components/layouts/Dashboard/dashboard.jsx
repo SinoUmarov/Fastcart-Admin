@@ -1,65 +1,97 @@
-import { extendTheme } from "@mui/material";
-import { AppProvider, DashboardLayout, PageContainer } from "@toolpad/core";
+import {
+  AppProvider,
+  DashboardLayout,
+  PageContainer,
+} from "@toolpad/core";
+import { extendTheme, Box, Button, useMediaQuery } from "@mui/material";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import LayersIcon from "@mui/icons-material/Layers";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import logo from "../../../pages/login/img/Group 1116606595 (1).png";
+import LogoutIcon from "@mui/icons-material/Logout";
 
+import logo1 from "../../../pages/login/img/Group 1116606595 (1).png"
 const NAVIGATION = [
-  { kind: "header", title: "Main items" },
-  { segment: "dashboard", title: "Dasboard", icon: <DashboardIcon /> },
+  { kind: "header", title: "Main" },
+  { segment: "dashboard", title: "Dashboard", icon: <DashboardIcon /> },
   { segment: "dashboard/orders", title: "Orders", icon: <ShoppingCartIcon /> },
   { segment: "dashboard/products", title: "Products", icon: <LayersIcon /> },
   { segment: "dashboard/other", title: "Other", icon: <BarChartIcon /> },
   {
     kind: "/",
     title: (
-      <button
-        className="cursor-pointer"
+      <Button
         onClick={() => {
           localStorage.removeItem("Admin");
           window.location = "/";
+        }}
+        startIcon={<LogoutIcon />}
+        variant="outlined"
+        color="error"
+        sx={{
+          textTransform: "none",
+          borderRadius: 2,
+          px: 2,
+          fontWeight: 500,
+          "&:hover": {
+            backgroundColor: "rgba(255,0,0,0.08)",
+          },
         }}
       >
         Logout
-      </button>
+      </Button>
     ),
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="size-6"
-        onClick={() => {
-          localStorage.removeItem("Admin");
-          window.location = "/";
-        }}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
-        />
-      </svg>
-    ),
+    icon: <LogoutIcon color="error" />,
   },
 ];
 
 const demoTheme = extendTheme({
-  colorSchemes: { light: true, dark: true },
-  colorSchemeSelector: "class",
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
+  colorSchemes: {
+    light: {
+      palette: {
+        mode: "light",
+        primary: {
+          main: "#6366f1",
+        },
+        background: {
+          default: "#f9fafb",
+          paper: "#ffffff",
+        },
+      },
+    },
+    dark: {
+      palette: {
+        mode: "dark",
+        primary: {
+          main: "#8b5cf6", // Violet
+        },
+        background: {
+          default: "#0f172a",
+          paper: "#1e293b",
+        },
+      },
+    },
+  },
+  shape: {
+    borderRadius: 16,
+  },
+  typography: {
+    fontFamily: "Inter, sans-serif",
+    h6: {
+      fontWeight: 600,
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+          transition: "0.25s ease-in-out",
+        },
+      },
     },
   },
 });
@@ -67,7 +99,6 @@ const demoTheme = extendTheme({
 function useDemoRouter() {
   const location = useLocation();
   const navigate = useNavigate();
-
   return {
     pathname: location.pathname,
     searchParams: new URLSearchParams(location.search),
@@ -77,28 +108,65 @@ function useDemoRouter() {
 
 const Dashbord = () => {
   const navigate = useNavigate();
-  const router = useDemoRouter("/dashboard");
-
+  const router = useDemoRouter();
   const demoWindow = typeof window !== "undefined" ? window : undefined;
+
+  const prefersDark = useMediaQuery("(prefers-color-scheme: dark)");
+
   useEffect(() => {
     const token = localStorage.getItem("Admin");
     if (!token) navigate("/");
-    console.log(token);
   }, [navigate]);
+
   return (
     <AppProvider
       branding={{
-        logo: <img src={logo} />,
-        title: "",
+        logo: (
+          <img
+            src={logo1}
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: "50%",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+              objectFit: "cover",
+            }}
+          />
+        ),
+        title: "FastCart Admin",
       }}
       navigation={NAVIGATION}
       router={router}
       theme={demoTheme}
       window={demoWindow}
+      colorScheme={prefersDark ? "dark" : "light"}
     >
       <DashboardLayout>
         <PageContainer>
-          <Outlet />
+          <Box
+            sx={{
+              backdropFilter: "blur(12px)",
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              darkMode: {
+                backgroundColor: "rgba(30, 41, 59, 0.7)",
+              },
+              p: 4,
+              borderRadius: 4,
+              boxShadow: 6,
+              transition: "all 0.3s ease",
+              minHeight: "80vh",
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              animation: "fadein 0.4s ease-in-out",
+              "@keyframes fadein": {
+                from: { opacity: 0, transform: "translateY(10px)" },
+                to: { opacity: 1, transform: "translateY(0px)" },
+              },
+            }}
+          >
+            <Outlet />
+          </Box>
         </PageContainer>
       </DashboardLayout>
     </AppProvider>
