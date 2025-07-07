@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { axiosRequest } from '../../api/axiosRequest'
+import { axiosRequest } from '../../utils/axiosRequest'
 
 const Login = () => {
   const navigate = useNavigate();
